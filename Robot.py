@@ -47,8 +47,6 @@ class Robot(object):
             # TODO 2. Update parameters when learning
             self.epsilon = self.epsilon0 * 0.95
             self.t += 1
-
-
         return self.epsilon
 
     def sense_state(self):
@@ -71,7 +69,7 @@ class Robot(object):
         if state in self.Qtable:
         	pass
         else:
-        	
+            self.Qtable.setdefault(state, dict.fromkeys(self.valid_actions,0.))
 
     def choose_action(self):
         """
@@ -106,7 +104,8 @@ class Robot(object):
 
             # TODO 8. When learning, update the q table according
             # to the given rules
-
+            max_qvalue = max(self.Qtable[next_state].values())
+            self.Qtable[self.state][action] = (1 - self.alpha) * self.Qtable[self.state][action] + self.alpha * (r + self.gamma * max_qvalue)
 
 
     def update(self):
