@@ -1,4 +1,5 @@
 import random
+import math
 
 class Robot(object):
 
@@ -45,8 +46,11 @@ class Robot(object):
             self.epsilon = 0
         else:
             # TODO 2. Update parameters when learning
-            self.epsilon = self.epsilon0 * 0.95
             self.t += 1
+            if self.epsilon <= 0:
+                self.epsilon = 0
+            else:
+                self.epsilon = 0.5*math.cos(math.pi/2/3000 * self.t)
         return self.epsilon
 
     def sense_state(self):
@@ -66,10 +70,7 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
-        if state in self.Qtable:
-        	pass
-        else:
-            self.Qtable.setdefault(state, dict.fromkeys(self.valid_actions,0.))
+        self.Qtable.setdefault(state, dict.fromkeys(self.valid_actions,0.))
 
     def choose_action(self):
         """
